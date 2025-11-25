@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🎉 生日快乐！🎉</title>
+    <link rel="stylesheet" href="https://cdn.plyr.io/3.7.8/plyr.css">
+    
+    <style>
+        body {
+            font-family: 'Microsoft JhengHei', 'Arial', sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            background: linear-gradient(to bottom right, #ffe0f0, #cce5ff); /* 沿用第一個檔案的背景色 */
+            color: #d81b60;
+            text-align: center;
+            flex-direction: column;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        .birthday-card {
+            background-color: #ffffff;
+            padding: 40px 60px;
+            border-radius: 15px;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+            animation: bounceIn 1s ease-out;
+            max-width: 90%;
+            width: 500px; /* 給一個基準寬度 */
+            box-sizing: border-box;
+            position: relative;
+            z-index: 10;
+        }
+
+        h1 {
+            font-size: 2.8em; /* 調整大小以適應卡片 */
+            margin-bottom: 20px;
+            color: #e91e63;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        #countdown {
+            font-size: 1.5em; /* 調整大小 */
+            font-weight: bold;
+            color: #880e4f;
+            margin-top: 20px;
+            margin-bottom: 20px;
+        }
+
+        button {
+            margin-top: 20px;
+            padding: 10px 25px;
+            background-color: #ff69b4;
+            color: white;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background-color 0.3s ease;
+        }
+
+        button:hover {
+            background-color: #ff85c1;
+        }
+
+        /* 來自第二個檔案的精美紙屑動畫 */
+        .confetti {
+            position: fixed; /* 使用fixed確保全螢幕掉落 */
+            width: 10px;
+            height: 10px;
+            background-color: #ff6b6b;
+            top: -10px;
+            animation: fall linear infinite;
+            opacity: 0.8;
+            border-radius: 20%; /* 可以是方形或圓形 */
+            z-index: 1;
+        }
+
+        @keyframes fall {
+            0% {
+                transform: translateY(0) rotateZ(0deg);
+                opacity: 0.8;
+            }
+            100% {
+                transform: translateY(100vh) rotateZ(720deg);
+                opacity: 0;
+            }
+        }
+
+        @keyframes bounceIn {
+            0% { opacity: 0; transform: translateY(-100px); }
+            60% { opacity: 1; transform: translateY(20px); }
+            100% { transform: translateY(0); }
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        /* 來自第二個檔案的精美祝福彈窗樣式 */
+        .message-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.6);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            backdrop-filter: blur(5px);
+            animation: fadeIn 0.3s ease-out;
+        }
+
+        .message-box {
+            background: linear-gradient(135deg, #f06292, #ef5350);
+            color: white;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 5px 25px rgba(0,0,0,0.4);
+            max-width: 80%;
+            text-align: center;
+            transform: scale(0.9);
+            animation: popIn 0.3s cubic-bezier(0.68, -0.55, 0.27, 1.55) forwards;
+        }
+        .message-box p {
+            font-size: 1.8em;
+            margin-bottom: 25px;
+            font-weight: bold;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.2);
+        }
+        .message-box button {
+            background-color: #ffb74d;
+            color: #880e4f;
+        }
+        .message-box button:hover {
+            background-color: #ff9800;
+        }
+
+        @keyframes popIn {
+            0% { transform: scale(0.7); opacity: 0; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+
+        #audio-container {
+            margin: 20px auto;
+            max-width: 400px;
+        }
+        .plyr--audio .plyr__controls {
+            background: rgba(255, 255, 255, 0.8);
+            border-radius: 8px;
+            color: #d81b60;
+        }
+
+        /* 響應式設計 */
+        @media (max-width: 768px) {
+            .birthday-card { padding: 30px 40px; }
+            h1 { font-size: 2.5em; }
+            #countdown { font-size: 1.2em; }
+            .message-box p { font-size: 1.5em; }
+        }
+        @media (max-width: 480px) {
+            .birthday-card { padding: 20px 25px; }
+            h1 { font-size: 2em; }
+            #countdown { font-size: 1em; }
+            .message-box p { font-size: 1.2em; }
+        }
+    </style>
+</head>
+<body>
+    <div class="birthday-card">
+        <h1>🎉 生日快乐！🎉</h1>
+        <img src="https://via.placeholder.com/200x200?text=生日照" alt="生日照片" 
+             style="width: 200px; height: 200px; border-radius: 50%; margin: 30px;"
+             id="birthday-photo">
+        
+        <div id="countdown"></div>
+        
+        <div id="audio-container">
+            <audio id="audio-player" controls playsinline></audio>
+        </div>
+        
+        <button onclick="toggleMessage()">显示祝福</button>
+    </div>
+
+    <script src="https://cdn.plyr.io/3.7.8/plyr.js"></script>
+    
+    <script>
+        const birthday = new Date("2025-06-25T12:00:00");
+        const countdownElement = document.getElementById('countdown');
+        const mainHeader = document.querySelector('.birthday-card h1');
+
+        let countdownInterval;
+        let birthdayReached = false;
+
+        function updateCountdown() {
+            if (birthdayReached) return;
+
+            const now = new Date();
+            const diff = birthday - now;
+
+            if (diff <= 0) {
+                birthdayReached = true;
+                clearInterval(countdownInterval);
+                
+                countdownElement.style.display = 'none';
+                mainHeader.innerHTML = "🎂 就是现在！生日快乐！ 🎂";
+                mainHeader.style.animation = "pulse 1.5s infinite"; // 添加一個跳動特效
+                
+                createConfetti(200);
+
+                player.play().catch(error => {
+                    console.warn('庆祝时刻的自动播放被阻止：', error);
+                });
+
+                const finalMessage = "🌟 愿望成真，美梦成真！新的一岁，未来可期！ 🌟";
+                setTimeout(() => { toggleMessage(finalMessage); }, 1000); // 延遲1秒彈出，更有節奏感
+
+            } else {
+                const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+                const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+                const seconds = Math.floor((diff % (1000 * 60)) / 1000);
+                countdownElement.innerHTML = `距离生日还有：${days} 天 ${hours} 小时 ${minutes} 分钟 ${seconds} 秒`;
+            }
+        }
+
+        countdownInterval = setInterval(updateCountdown, 1000);
+        updateCountdown();
+
+        const player = new Plyr('#audio-player', {
+            controls: ['play', 'progress', 'current-time', 'mute', 'volume'],
+            iconUrl: 'https://cdn.plyr.io/3.7.8/plyr.svg'
+        });
+
+        function createConfetti(count = 30) { // 初始紙屑數量調整
+            const colors = ['#ff6b6b', '#4ecdc4', '#ffd700', '#e84393', '#6a0572', '#ff8c00'];
+            for (let i = 0; i < count; i++) {
+                const confetti = document.createElement('div');
+                confetti.className = 'confetti';
+                confetti.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+                confetti.style.left = `${Math.random() * 100}%`;
+                confetti.style.animationDelay = `${Math.random() * 5}s`;
+                confetti.style.animationDuration = `${5 + Math.random() * 5}s`;
+                document.body.appendChild(confetti);
+            }
+        }
+        createConfetti();
+
+        const messages = [
+            "🎉 愿你的每一天都充满阳光和欢笑！",
+            "🎂 新的一岁要继续闪闪发光哦～",
+            "🎁 所有美好都如期而至！",
+            "🌟 祝世界上最棒的人生日快乐！",
+            "💖 愿你的生活比蜜糖还甜！",
+            "🎈 愿你岁岁平安，朝朝暮暮幸福！",
+            "其实想表白的,但这样我太自私了" // 保留了你添加的這句話
+        ];
+
+        function toggleMessage(specificMessage = null) {
+            const message = specificMessage || messages[Math.floor(Math.random() * messages.length)];
+            const overlay = document.createElement('div');
+            overlay.className = 'message-overlay';
+            overlay.innerHTML = `
+                <div class="message-box">
+                    <p>${message}</p>
+                    <button onclick="this.parentElement.parentElement.remove()">关闭</button>
+                </div>
+            `;
+            document.body.appendChild(overlay);
+        }
+
+        function loadImage(url) {
+            return new Promise((resolve, reject) => {
+                const img = new Image();
+                img.onload = () => resolve(img.src);
+                img.onerror = () => reject('图片加载失败，请检查链接或文件是否存在。');
+                img.src = url;
+            });
+        }
+
+        function showError(message) {
+            alert(`⚠️ 错误提示：${message}`);
+        }
+
+        window.onload = async () => {
+            const photoUrl = 'https://imgur.la/images/2025/06/12/10000486179641f9a3209d337d.jpg';
+            try {
+                const loadedPhotoUrl = await loadImage(photoUrl);
+                document.getElementById('birthday-photo').src = loadedPhotoUrl;
+            } catch (error) {
+                showError(error);
+                document.getElementById('birthday-photo').src = "https://via.placeholder.com/200x200?text=图片加载失败";
+            }
+
+            const audioUrl = 'https://dlink.host/musics/aHR0cHM6Ly9vbmVkcnYtbXkuc2hhcmVwb2ludC5jb20vOnU6L2cvcGVyc29uYWwvc3Rvcl9vbmVkcnZfb25taWNyb3NvZnRfY29tL0VjbFBZYjRfVk1CTm00REhHZnpHYTFJQlBHdFExM3ZFUThCUGs4d1hQX2x4dUE.mp3';
+            const audioPlayer = document.getElementById('audio-player');
+            audioPlayer.innerHTML = `<source src="${audioUrl}" type="audio/mpeg">您的浏览器不支持音频播放。`;
+            player.source = {
+                type: 'audio',
+                sources: [{ src: audioUrl, type: 'audio/mpeg' }]
+            };
+        };
+    </script>
+</body>
+</html>
